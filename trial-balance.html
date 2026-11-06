@@ -22,17 +22,44 @@ input{width:100%;font:inherit;font-size:20px;padding:11px 12px;border:1px solid 
 .note{color:var(--mute);font-size:13px;text-align:center;margin-top:6px}
 .back{display:inline-block;color:var(--accent);font-size:15px;font-weight:600;text-decoration:none;margin-bottom:10px}
 .badge{font-size:13px;padding:3px 10px;border-radius:99px;background:#e6f5ec;color:var(--green)}
-.badge.warn{background:#fbe9ea;color:var(--accent)}</style></head><body>
+.badge.warn{background:#fbe9ea;color:var(--accent)}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.bar strong{font-size:17px}
+.bar button{border:0;background:none;color:var(--accent);font:inherit;font-size:15px;font-weight:600;padding:4px 0 4px 14px}
+.sel{cursor:pointer}.box{width:28px;height:28px;border-radius:50%;border:2px solid #d4d4d9;flex:none;display:grid;place-items:center}
+.sel.on .box{background:var(--accent);border-color:var(--accent)}.sel:not(.on) .box svg{display:none}
+.sel:not(.on) .t,.sel:not(.on) .r{color:var(--mute)}
+body{padding-bottom:110px}
+.dock{position:fixed;left:0;right:0;bottom:0;padding:12px 16px max(16px,env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%)}
+.dock button{display:block;width:100%;max-width:488px;margin:auto;border:0;border-radius:16px;background:var(--accent);color:#fff;font:inherit;font-size:17px;font-weight:600;padding:15px}
+.dock button:disabled{background:#cfcfd4}
+.n{width:74px;font-size:14px}</style></head><body>
 <a class="back" href="index.html">‹ Home</a>
-<h1>Trial balance</h1><p class="sub">As at month end, in USD</p>
-<section class="card" id="list"></section>
+<h1>Trial balance</h1><p class="sub">As at month end, in USD · tap rows to include or skip</p>
+<div id="barwrap"></div><section class="card" id="list"></section>
+<div class="bar" style="display:none"></div>
 <p class="note">Sample data for layout preview</p>
+<div class="dock"><button id="copy">Copy</button></div>
 <script>
 const tg=window.Telegram?.WebApp;tg?.ready();tg?.expand();
 tg?.BackButton?.show();tg?.BackButton?.onClick(()=>location.href="index.html");
 const $=id=>document.getElementById(id);
 const money=n=>n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
-const rows=[["1000","Cash",48250,0],["1100","Accounts receivable",21400,0],["1500","Equipment",35000,0],["2000","Accounts payable",0,18900],["2500","Loan payable",0,30000],["3000","Owner's equity",0,40000],["4000","Sales revenue",0,62500],["5000","Cost of sales",28300,0],["6000","Salaries",14500,0],["6100","Rent",3600,0],["6200","Utilities",350,0]];
-const d=rows.reduce((s,r)=>s+r[2],0),c=rows.reduce((s,r)=>s+r[3],0);
-$("list").innerHTML=`<div class="row m"><div class="txt">Account</div><div class="r" style="width:92px">Debit</div><div class="r" style="width:92px">Credit</div></div>`+rows.map(([k,n,dr,cr])=>`<div class="row"><div class="txt"><div class="t" style="font-size:16px">${n}</div><div class="m">${k}</div></div><div class="r" style="width:92px">${dr?money(dr):"–"}</div><div class="r" style="width:92px">${cr?money(cr):"–"}</div></div>`).join("")+`<div class="row tot"><div class="txt">Total</div><div class="r" style="width:92px">${money(d)}</div><div class="r" style="width:92px">${money(c)}</div></div><div class="row"><div class="txt m">Check</div><span class="badge ${d===c?"":"warn"}">${d===c?"Balanced":"Out by "+money(Math.abs(d-c))}</span></div>`;
+const num=n=>n.toFixed(2);
+const check='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const barHTML='<div class="bar"><strong id="cnt"></strong><span><button id="all">Select all</button><button id="none">None</button></span></div>';
+async function copyOut(text,n){
+  try{await navigator.clipboard.writeText(text)}catch(e){const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove()}
+  try{const a=JSON.parse(localStorage.getItem("copylog")||"[]");a.push({v:document.title,n:n,t:Date.now()});localStorage.setItem("copylog",JSON.stringify(a.slice(-500)))}catch(e){}tg?.HapticFeedback?.notificationOccurred("success");$("copy").textContent="Copied "+n+" row"+(n>1?"s":"");setTimeout(()=>refresh(),1800);
+}
+function setCopy(n){$("copy").disabled=!n;$("copy").textContent=n?"Copy "+n+" row"+(n>1?"s":""):"Select rows to copy"}
+const rows=[["1000","Cash",48250,0],["1100","Accounts receivable",21400,0],["1500","Equipment",35000,0],["2000","Accounts payable",0,18900],["2500","Loan payable",0,30000],["3000","Owner's equity",0,40000],["4000","Sales revenue",0,62500],["5000","Cost of sales",28300,0],["6000","Salaries",14500,0],["6100","Rent",3600,0],["6200","Utilities",350,0]].map(r=>({k:r[0],n:r[1],d:r[2],c:r[3],sel:true}));
+$("barwrap").innerHTML=barHTML;
+function refresh(){const s=rows.filter(x=>x.sel),d=s.reduce((a,x)=>a+x.d,0),c=s.reduce((a,x)=>a+x.c,0);
+$("list").innerHTML=`<div class="row m" style="padding-left:42px"><div class="txt">Account</div><div class="r n">Debit</div><div class="r n">Credit</div></div>`+rows.map((x,i)=>`<div class="row sel ${x.sel?"on":""}" data-i="${i}"><span class="box">${check}</span><div class="txt"><div class="t" style="font-size:15px">${x.n}</div><div class="m">${x.k}</div></div><div class="r n">${x.d?money(x.d):"–"}</div><div class="r n">${x.c?money(x.c):"–"}</div></div>`).join("")+`<div class="row tot" style="padding-left:42px"><div class="txt">Total</div><div class="r n">${money(d)}</div><div class="r n">${money(c)}</div></div><div class="row" style="padding-left:42px"><div class="txt m">Check</div><span class="badge ${d===c?"":"warn"}">${d===c?"Balanced":"Out by "+money(Math.abs(d-c))}</span></div>`;
+document.querySelectorAll(".sel").forEach(el=>el.onclick=()=>{const x=rows[el.dataset.i];x.sel=!x.sel;refresh()});
+$("cnt").textContent=s.length+" of "+rows.length+" selected";setCopy(s.length);
+$("all").onclick=()=>{rows.forEach(x=>x.sel=true);refresh()};$("none").onclick=()=>{rows.forEach(x=>x.sel=false);refresh()}}
+$("copy").onclick=()=>{const s=rows.filter(x=>x.sel),d=s.reduce((a,x)=>a+x.d,0),c=s.reduce((a,x)=>a+x.c,0);
+copyOut(["Code\tAccount\tDebit\tCredit"].concat(s.map(x=>[x.k,x.n,x.d?num(x.d):"",x.c?num(x.c):""].join("\t")),["\tTotal\t"+num(d)+"\t"+num(c)]).join("\n"),s.length)};
+refresh();
 </script></body></html>

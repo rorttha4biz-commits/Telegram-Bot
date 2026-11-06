@@ -151,7 +151,7 @@ async function copy(){
     const text = parts.join("\n");
     try { await navigator.clipboard.writeText(text); }
     catch(e){ const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); }
-    tg?.HapticFeedback?.notificationOccurred("success");
+    try{const a=JSON.parse(localStorage.getItem("copylog")||"[]");a.push({v:"Source files",n:sel.length,t:Date.now()});localStorage.setItem("copylog",JSON.stringify(a.slice(-500)))}catch(e){}tg?.HapticFeedback?.notificationOccurred("success");
     $("copy").textContent = `Copied ${sel.length} file${sel.length>1?"s":""}`;
     setTimeout(render, 1800);
   } catch(e){ note("Copy failed: " + e.message, true); render(); }
