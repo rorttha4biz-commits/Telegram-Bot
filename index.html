@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Today</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#efeff1;--card:#fff;--ink:#16161a;--mute:#8c8c94;--accent:#d9545d;--track:#f6dcde;--seg:#e4e4e8;--line:#efeff1;--amber:#e8b13a}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;padding:max(20px,env(safe-area-inset-top)) 16px 32px;max-width:520px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.date{color:var(--mute);font-size:15px}
+h1{font-size:32px;font-weight:700;letter-spacing:-.02em;margin-top:2px}
+.bell{width:52px;height:52px;border-radius:50%;background:var(--card);border:0;display:grid;place-items:center;position:relative}
+.bell i{position:absolute;top:11px;right:11px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--card)}
+.card{background:var(--card);border-radius:24px}
+.progress{display:flex;align-items:center;gap:18px;padding:18px 20px;margin-bottom:16px}
+.ring{position:relative;width:76px;height:76px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:16px;font-weight:600}
+.progress strong{font-size:19px;font-weight:600;display:block}
+.progress span{color:var(--mute);font-size:15px}
+.tabs{display:flex;background:var(--seg);border-radius:14px;padding:4px;margin-bottom:16px}
+.tabs button{flex:1;border:0;background:none;padding:10px 0;font:inherit;font-size:16px;color:var(--ink);border-radius:11px}
+.tabs button[aria-selected=true]{background:var(--card);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+ul{list-style:none;padding:6px 20px}
+li{display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);cursor:pointer}
+li:last-child{border:0}
+.box{width:38px;height:38px;border-radius:50%;border:2px solid #d4d4d9;flex:none;display:grid;place-items:center}
+li.done .box{background:var(--accent);border-color:var(--accent)}
+li:not(.done) .box svg{display:none}
+.txt{flex:1;min-width:0}
+.title{font-size:19px;line-height:1.25}
+.meta{color:var(--mute);font-size:15px;margin-top:3px}
+li.done .title{text-decoration:line-through;color:var(--mute)}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+@media (prefers-color-scheme:dark){:root{--bg:#efeff1}}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="date" id="date"></div><h1>Today</h1></div>
+  <button class="bell" aria-label="Notifications"><i></i>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16161a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+  </button>
+</header>
+
+<section class="card progress">
+  <div class="ring">
+    <svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" fill="none" stroke="var(--track)" stroke-width="7"/><circle id="arc" cx="38" cy="38" r="32" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="201"/></svg>
+    <b id="pct">0%</b>
+  </div>
+  <div><strong id="count"></strong><span id="next"></span></div>
+</section>
+
+<div class="tabs" role="tablist">
+  <button role="tab" aria-selected="false">All</button>
+  <button role="tab" aria-selected="true">Today</button>
+  <button role="tab" aria-selected="false">Upcoming</button>
+</div>
+
+<section class="card"><ul id="list"></ul></section>
+
+<script>
+const tg = window.Telegram?.WebApp; tg?.ready(); tg?.expand();
+
+const tasks = [
+  {t:"Finish the Q4 roadmap deck", time:"5:00 pm", tag:"Work", pri:"#d9545d", done:false},
+  {t:"Review design system PRs", time:"6:30 pm", tag:"Work", pri:"#e8b13a", done:false},
+  {t:"Book a dentist appointment", time:"4:00 pm", tag:"Personal", done:false},
+  {t:"Buy groceries for the weekend", time:"7:00 pm", tag:"Personal", done:false},
+  {t:"Send the invoice to Lumen", tag:"Work", done:true},
+];
+const mins = s => { const [h,m] = s.replace(/ [ap]m/,"").split(":").map(Number); return (h%12 + (/pm/.test(s)?12:0))*60 + m; };
+const check = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+document.getElementById("date").textContent =
+  new Date().toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric"});
+
+function render(){
+  const list = document.getElementById("list"); list.innerHTML = "";
+  tasks.forEach(k => {
+    const li = document.createElement("li"); if (k.done) li.className = "done";
+    li.innerHTML = `<span class="box">${check}</span>
+      <div class="txt"><div class="title">${k.t}</div>
+      <div class="meta">${k.done ? "Done" : k.time} · ${k.tag}</div></div>
+      ${k.pri && !k.done ? `<span class="dot" style="background:${k.pri}"></span>` : ""}`;
+    li.onclick = () => { k.done = !k.done; tg?.HapticFeedback?.impactOccurred("light"); render(); };
+    list.appendChild(li);
+  });
+  const done = tasks.filter(k => k.done).length, left = tasks.filter(k => !k.done);
+  const pct = Math.round(done / tasks.length * 100);
+  document.getElementById("pct").textContent = pct + "%";
+  document.getElementById("arc").style.strokeDashoffset = 201 * (1 - pct/100);
+  document.getElementById("count").textContent = `${done} of ${tasks.length} done`;
+  const nxt = left.filter(k => k.time).sort((a,b) => mins(a.time) - mins(b.time))[0];
+  document.getElementById("next").textContent = left.length
+    ? `${left.length} left today, next at ${nxt.time}` : "All done for today";
+}
+render();
+
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".tabs button").forEach(x => x.setAttribute("aria-selected", x === b));
+});
+</script>
+</body>
+</html>
