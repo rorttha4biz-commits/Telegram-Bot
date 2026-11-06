@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trial balance</title><script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>:root{--bg:#efeff1;--card:#fff;--ink:#16161a;--mute:#8c8c94;--accent:#d9545d;--seg:#e4e4e8;--line:#efeff1;--green:#2e9e63}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;padding:max(20px,env(safe-area-inset-top)) 16px 40px;max-width:520px;margin:auto}
+h1{font-size:30px;font-weight:700;letter-spacing:-.02em}
+.sub{color:var(--mute);font-size:15px;margin:2px 0 16px}
+.card{background:var(--card);border-radius:24px;padding:8px 20px;margin-bottom:14px}
+.card.pad{padding:16px 20px}
+.row{display:flex;align-items:center;gap:14px;padding:15px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}
+.txt{flex:1;min-width:0}.t{font-size:17px}.m{color:var(--mute);font-size:14px;margin-top:2px}
+.r{text-align:right;font-variant-numeric:tabular-nums}
+.up{color:var(--green)}.down{color:var(--accent)}
+.tot{font-weight:700}
+.seg{display:flex;background:var(--seg);border-radius:14px;padding:4px;margin-bottom:14px}
+.seg button{flex:1;border:0;background:none;padding:9px 0;font:inherit;font-size:15px;border-radius:11px;color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--card);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+input{width:100%;font:inherit;font-size:20px;padding:11px 12px;border:1px solid #e0e0e4;border-radius:12px;background:#fafafb}
+.note{color:var(--mute);font-size:13px;text-align:center;margin-top:6px}
+.back{display:inline-block;color:var(--accent);font-size:15px;font-weight:600;text-decoration:none;margin-bottom:10px}
+.badge{font-size:13px;padding:3px 10px;border-radius:99px;background:#e6f5ec;color:var(--green)}
+.badge.warn{background:#fbe9ea;color:var(--accent)}</style></head><body>
+<a class="back" href="index.html">‹ Home</a>
+<h1>Trial balance</h1><p class="sub">As at month end, in USD</p>
+<section class="card" id="list"></section>
+<p class="note">Sample data for layout preview</p>
+<script>
+const tg=window.Telegram?.WebApp;tg?.ready();tg?.expand();
+tg?.BackButton?.show();tg?.BackButton?.onClick(()=>location.href="index.html");
+const $=id=>document.getElementById(id);
+const money=n=>n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const rows=[["1000","Cash",48250,0],["1100","Accounts receivable",21400,0],["1500","Equipment",35000,0],["2000","Accounts payable",0,18900],["2500","Loan payable",0,30000],["3000","Owner's equity",0,40000],["4000","Sales revenue",0,62500],["5000","Cost of sales",28300,0],["6000","Salaries",14500,0],["6100","Rent",3600,0],["6200","Utilities",350,0]];
+const d=rows.reduce((s,r)=>s+r[2],0),c=rows.reduce((s,r)=>s+r[3],0);
+$("list").innerHTML=`<div class="row m"><div class="txt">Account</div><div class="r" style="width:92px">Debit</div><div class="r" style="width:92px">Credit</div></div>`+rows.map(([k,n,dr,cr])=>`<div class="row"><div class="txt"><div class="t" style="font-size:16px">${n}</div><div class="m">${k}</div></div><div class="r" style="width:92px">${dr?money(dr):"–"}</div><div class="r" style="width:92px">${cr?money(cr):"–"}</div></div>`).join("")+`<div class="row tot"><div class="txt">Total</div><div class="r" style="width:92px">${money(d)}</div><div class="r" style="width:92px">${money(c)}</div></div><div class="row"><div class="txt m">Check</div><span class="badge ${d===c?"":"warn"}">${d===c?"Balanced":"Out by "+money(Math.abs(d-c))}</span></div>`;
+</script></body></html>

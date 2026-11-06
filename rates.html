@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Exchange rate</title><script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>:root{--bg:#efeff1;--card:#fff;--ink:#16161a;--mute:#8c8c94;--accent:#d9545d;--seg:#e4e4e8;--line:#efeff1;--green:#2e9e63}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;padding:max(20px,env(safe-area-inset-top)) 16px 40px;max-width:520px;margin:auto}
+h1{font-size:30px;font-weight:700;letter-spacing:-.02em}
+.sub{color:var(--mute);font-size:15px;margin:2px 0 16px}
+.card{background:var(--card);border-radius:24px;padding:8px 20px;margin-bottom:14px}
+.card.pad{padding:16px 20px}
+.row{display:flex;align-items:center;gap:14px;padding:15px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}
+.txt{flex:1;min-width:0}.t{font-size:17px}.m{color:var(--mute);font-size:14px;margin-top:2px}
+.r{text-align:right;font-variant-numeric:tabular-nums}
+.up{color:var(--green)}.down{color:var(--accent)}
+.tot{font-weight:700}
+.seg{display:flex;background:var(--seg);border-radius:14px;padding:4px;margin-bottom:14px}
+.seg button{flex:1;border:0;background:none;padding:9px 0;font:inherit;font-size:15px;border-radius:11px;color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--card);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+input{width:100%;font:inherit;font-size:20px;padding:11px 12px;border:1px solid #e0e0e4;border-radius:12px;background:#fafafb}
+.note{color:var(--mute);font-size:13px;text-align:center;margin-top:6px}
+.back{display:inline-block;color:var(--accent);font-size:15px;font-weight:600;text-decoration:none;margin-bottom:10px}
+.badge{font-size:13px;padding:3px 10px;border-radius:99px;background:#e6f5ec;color:var(--green)}
+.badge.warn{background:#fbe9ea;color:var(--accent)}</style></head><body>
+<a class="back" href="index.html">‹ Home</a>
+<h1>Exchange rate</h1><p class="sub">1 USD equals</p>
+<section class="card pad"><input id="amt" type="number" inputmode="decimal" value="100" aria-label="Amount in USD"></section><section class="card" id="list"></section>
+<p class="note">Sample data for layout preview</p>
+<script>
+const tg=window.Telegram?.WebApp;tg?.ready();tg?.expand();
+tg?.BackButton?.show();tg?.BackButton?.onClick(()=>location.href="index.html");
+const $=id=>document.getElementById(id);
+const money=n=>n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const rates=[["EUR","Euro",0.92,0.12],["GBP","British pound",0.79,-0.08],["JPY","Japanese yen",151.2,0.31],["SGD","Singapore dollar",1.34,0.05],["THB","Thai baht",35.8,-0.22],["CNY","Chinese yuan",7.24,0.02]];
+function draw(){const a=parseFloat($("amt").value)||0;$("list").innerHTML=rates.map(([c,n,r,d])=>`<div class="row"><div class="txt"><div class="t">${c}</div><div class="m">${n}</div></div><div class="r"><div class="t">${money(a*r)}</div><div class="m ${d>=0?"up":"down"}">${d>=0?"+":""}${d.toFixed(2)}% · ${r}</div></div></div>`).join("")}
+$("amt").oninput=draw;draw();
+</script></body></html>

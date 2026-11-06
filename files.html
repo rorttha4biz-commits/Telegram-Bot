@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Source files</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#efeff1;--card:#fff;--ink:#16161a;--mute:#8c8c94;--accent:#d9545d;--seg:#e4e4e8;--line:#efeff1}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;padding:max(20px,env(safe-area-inset-top)) 16px 110px;max-width:520px;margin:auto}
+h1{font-size:30px;font-weight:700;letter-spacing:-.02em}
+.sub{color:var(--mute);font-size:15px;margin:2px 0 16px}
+.card{background:var(--card);border-radius:24px;padding:16px 18px;margin-bottom:14px}
+label{display:block;color:var(--mute);font-size:13px;margin:10px 0 4px}
+label:first-child{margin-top:0}
+input{width:100%;font:inherit;font-size:16px;padding:11px 12px;border:1px solid #e0e0e4;border-radius:12px;background:#fafafb;color:var(--ink)}
+.days{display:flex;background:var(--seg);border-radius:14px;padding:4px;gap:2px}
+.days button{flex:1;border:0;background:none;padding:9px 0;font:inherit;font-size:15px;border-radius:11px;color:var(--ink)}
+.days button[aria-pressed=true]{background:var(--card);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.go{width:100%;margin-top:14px;border:0;border-radius:14px;background:var(--ink);color:#fff;font:inherit;font-size:16px;font-weight:600;padding:13px}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.bar strong{font-size:17px}
+.bar button{border:0;background:none;color:var(--accent);font:inherit;font-size:15px;font-weight:600;padding:4px 0 4px 14px}
+ul{list-style:none}
+li{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--line);cursor:pointer}
+li:last-child{border:0}
+.box{width:30px;height:30px;border-radius:50%;border:2px solid #d4d4d9;flex:none;display:grid;place-items:center}
+li.on .box{background:var(--accent);border-color:var(--accent)}
+li:not(.on) .box svg{display:none}
+.txt{flex:1;min-width:0}
+.name{font-size:16px;word-break:break-all}
+.meta{color:var(--mute);font-size:13px;margin-top:2px}
+li:not(.on) .name{color:var(--mute)}
+.msg{color:var(--mute);font-size:15px;padding:8px 0}
+.msg.err{color:var(--accent)}
+.dock{position:fixed;left:0;right:0;bottom:0;padding:12px 16px max(16px,env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%)}
+.dock button{display:block;width:100%;max-width:488px;margin:auto;border:0;border-radius:16px;background:var(--accent);color:#fff;font:inherit;font-size:17px;font-weight:600;padding:15px}
+.dock button:disabled{background:#cfcfd4}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<h1>Source files</h1>
+<p class="sub">Pick a repo, choose how many days back, then copy.</p>
+
+<section class="card">
+  <label for="repo">GitHub repo (owner/name)</label>
+  <input id="repo" value="rorttha4biz-commits/Telegram-Bot" autocapitalize="off" autocorrect="off">
+  <label for="folder">Source path (optional folder)</label>
+  <input id="folder" placeholder="e.g. src" autocapitalize="off" autocorrect="off">
+  <label>Changed in the last</label>
+  <div class="days" id="days">
+    <button data-d="1">1 day</button><button data-d="3">3</button><button data-d="7" aria-pressed="true">7</button><button data-d="30">30</button><button data-d="0">All</button>
+  </div>
+  <label for="token">GitHub token (optional, for private repos or more requests)</label>
+  <input id="token" type="password" autocapitalize="off" autocorrect="off">
+  <button class="go" id="load">Show files</button>
+</section>
+
+<section class="card" id="results" hidden>
+  <div class="bar"><strong id="count"></strong><span><button id="all">Select all</button><button id="none">None</button></span></div>
+  <div class="msg" id="msg" hidden></div>
+  <ul id="list"></ul>
+</section>
+
+<div class="dock" id="dock" hidden><button id="copy">Copy selected</button></div>
+
+<script>
+const tg = window.Telegram?.WebApp; tg?.ready(); tg?.expand();
+const $ = id => document.getElementById(id);
+const BIN = /\.(png|jpe?g|gif|webp|ico|pdf|zip|gz|mp[34]|mov|woff2?|ttf|otf|eot|exe|bin)$/i;
+let files = [], branch = "main", days = 7;
+
+try { const s = JSON.parse(localStorage.getItem("sp") || "{}");
+  if (s.repo) $("repo").value = s.repo; if (s.folder) $("folder").value = s.folder; if (s.token) $("token").value = s.token;
+  if (s.days !== undefined) days = s.days; } catch(e){}
+const setDays = d => { days = d; document.querySelectorAll("#days button").forEach(b => b.setAttribute("aria-pressed", +b.dataset.d === d)); };
+setDays(days);
+document.querySelectorAll("#days button").forEach(b => b.onclick = () => setDays(+b.dataset.d));
+
+async function gh(path){
+  const h = {Accept:"application/vnd.github+json"}; const t = $("token").value.trim();
+  if (t) h.Authorization = "Bearer " + t;
+  const r = await fetch("https://api.github.com/" + path, {headers:h});
+  if (r.status === 403 || r.status === 429) throw new Error("GitHub rate limit reached. Wait a while or add a token.");
+  if (r.status === 404) throw new Error("Repo or folder not found. Check the name (private repos need a token).");
+  if (!r.ok) throw new Error("GitHub error " + r.status);
+  return r.json();
+}
+const fmt = d => new Date(d).toLocaleDateString("en-US",{month:"short",day:"numeric"}) + ", " + new Date(d).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+const check = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+function note(t, err){ const m = $("msg"); m.hidden = !t; m.textContent = t || ""; m.className = "msg" + (err ? " err" : ""); }
+
+async function load(){
+  const repo = $("repo").value.trim().replace(/^https?:\/\/github\.com\//,"").replace(/\.git$/,"").replace(/\/$/,"");
+  const folder = $("folder").value.trim().replace(/^\/|\/$/g,"");
+  try { localStorage.setItem("sp", JSON.stringify({repo, folder, days, token:$("token").value})); } catch(e){}
+  $("results").hidden = false; $("dock").hidden = true; $("list").innerHTML = ""; $("count").textContent = "";
+  note("Loading…");
+  try {
+    branch = (await gh(`repos/${repo}`)).default_branch;
+    let out = [];
+    if (days === 0) {
+      const t = await gh(`repos/${repo}/git/trees/${branch}?recursive=1`);
+      out = t.tree.filter(x => x.type === "blob").map(x => ({path:x.path}));
+    } else {
+      const since = new Date(Date.now() - days*864e5).toISOString();
+      const q = `repos/${repo}/commits?sha=${branch}&since=${since}&per_page=30` + (folder ? `&path=${encodeURIComponent(folder)}` : "");
+      const commits = await gh(q), seen = new Map();
+      for (const c of commits) {
+        const d = await gh(`repos/${repo}/commits/${c.sha}`);
+        for (const f of d.files || []) if (!seen.has(f.filename)) seen.set(f.filename, f.status === "removed" ? null : c.commit.committer.date);
+      }
+      out = [...seen].filter(([,v]) => v).map(([p,v]) => ({path:p, date:v}));
+    }
+    if (folder) out = out.filter(f => f.path === folder || f.path.startsWith(folder + "/"));
+    out = out.filter(f => !BIN.test(f.path));
+    out.sort((a,b) => a.date && b.date ? b.date.localeCompare(a.date) : a.path.localeCompare(b.path));
+    files = out.map(f => ({...f, sel:true, repo}));
+    note(files.length ? "" : "No source files changed in this period.");
+    render();
+  } catch(e){ files = []; note(e.message, true); }
+}
+
+function render(){
+  const ul = $("list"); ul.innerHTML = "";
+  files.forEach(f => {
+    const li = document.createElement("li"); li.className = f.sel ? "on" : "";
+    const slash = f.path.lastIndexOf("/");
+    li.innerHTML = `<span class="box">${check}</span><div class="txt"><div class="name">${f.path.slice(slash+1)}</div><div class="meta">${slash>0 ? f.path.slice(0,slash)+" · " : ""}${f.date ? fmt(f.date) : "all time"}</div></div>`;
+    li.onclick = () => { f.sel = !f.sel; tg?.HapticFeedback?.selectionChanged(); render(); };
+    ul.appendChild(li);
+  });
+  const n = files.filter(f => f.sel).length;
+  $("count").textContent = `${n} of ${files.length} selected`;
+  $("dock").hidden = !files.length;
+  $("copy").disabled = !n; $("copy").textContent = n ? `Copy ${n} file${n>1?"s":""}` : "Select files to copy";
+}
+
+async function copy(){
+  const sel = files.filter(f => f.sel); if (!sel.length) return;
+  $("copy").disabled = true; $("copy").textContent = "Collecting…";
+  try {
+    const parts = [];
+    for (const f of sel) {
+      const r = await fetch(`https://raw.githubusercontent.com/${f.repo}/${branch}/${f.path.split("/").map(encodeURIComponent).join("/")}`);
+      parts.push(`===== ${f.path} =====\n` + (r.ok ? await r.text() : "[could not load]") + "\n");
+    }
+    const text = parts.join("\n");
+    try { await navigator.clipboard.writeText(text); }
+    catch(e){ const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); }
+    tg?.HapticFeedback?.notificationOccurred("success");
+    $("copy").textContent = `Copied ${sel.length} file${sel.length>1?"s":""}`;
+    setTimeout(render, 1800);
+  } catch(e){ note("Copy failed: " + e.message, true); render(); }
+}
+
+$("load").onclick = load; $("copy").onclick = copy;
+$("all").onclick = () => { files.forEach(f => f.sel = true); render(); };
+$("none").onclick = () => { files.forEach(f => f.sel = false); render(); };
+</script>
+</body>
+</html>
