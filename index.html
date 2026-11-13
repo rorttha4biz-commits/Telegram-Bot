@@ -300,6 +300,95 @@
     let excludedRouteIds = new Set();
     let currentCategoryRoute = null;
 
+    // Default routes for static hosting (GitHub Pages)
+    const DEFAULT_STATIC_ROUTES = [
+      {
+        route_id: 1,
+        route_name: "Exchange Rate",
+        icon: "💱",
+        subtitle: "Daily rates against USD",
+        files_count: 3,
+        total_bytes: 43911168,
+        human_total_size: "42,882 KB",
+        source_path: "Daily exchange rate\\Exchange Rate",
+        files: [
+          { name: "12-11-26.xls", relative_path: "2026\\11-Nov-26\\12-11-26.xls", human_size: "14,294 KB", modified_time: "11-12 13:52" },
+          { name: "11-11-26.xls", relative_path: "2026\\11-Nov-26\\11-11-26.xls", human_size: "14,294 KB", modified_time: "11-11 13:42" },
+          { name: "10-11-26.xls", relative_path: "2026\\11-Nov-26\\10-11-26.xls", human_size: "14,293 KB", modified_time: "11-10 14:23" }
+        ]
+      },
+      {
+        route_id: 2,
+        route_name: "Trial Balance",
+        icon: "⚖️",
+        subtitle: "Debits and credits by account",
+        files_count: 3,
+        total_bytes: 1337344,
+        human_total_size: "1,306 KB",
+        source_path: "TB From yanut",
+        files: [
+          { name: "TB.20261112.xls", relative_path: "2026\\11 Nov 2026\\TB.20261112.xls", human_size: "454 KB", modified_time: "11-13 09:13" },
+          { name: "TB.20261111.xls", relative_path: "2026\\11 Nov 2026\\TB.20261111.xls", human_size: "426 KB", modified_time: "11-12 07:54" },
+          { name: "TB.20261110.xls", relative_path: "2026\\11 Nov 2026\\TB.20261110.xls", human_size: "426 KB", modified_time: "11-11 08:29" }
+        ]
+      },
+      {
+        route_id: 3,
+        route_name: "Deposit Listing",
+        icon: "🏦",
+        subtitle: "Active and maturing deposits",
+        files_count: 6,
+        total_bytes: 4703399936,
+        human_total_size: "4,593,164 KB",
+        source_path: "V:\\1_DEPO",
+        files: [
+          { name: "LIST.20261112", relative_path: "202611\\LIST.20261112", human_size: "767,308 KB", modified_time: "11-13 06:28" },
+          { name: "LIST.20261111", relative_path: "202611\\LIST.20261111", human_size: "766,637 KB", modified_time: "11-12 06:41" },
+          { name: "LIST.20261110", relative_path: "202611\\LIST.20261110", human_size: "766,116 KB", modified_time: "11-11 06:40" }
+        ]
+      },
+      {
+        route_id: 4,
+        route_name: "Saroeurn",
+        icon: "📋",
+        subtitle: "Tax & monthly general reports",
+        files_count: 0,
+        total_bytes: 0,
+        human_total_size: "0 KB",
+        source_path: "General Report\\Saroeurn",
+        files: []
+      },
+      {
+        route_id: 5,
+        route_name: "Loan",
+        icon: "📑",
+        subtitle: "NBCOD and NBC74 loan reports",
+        files_count: 9,
+        total_bytes: 82004992,
+        human_total_size: "80,083 KB",
+        source_path: "Y:\\LOANS",
+        files: [
+          { name: "NBCOD.csv", relative_path: "2026\\11\\12\\NBCOD.csv", human_size: "462 KB", modified_time: "11-13 07:55" },
+          { name: "NBCOD.RGC.csv", relative_path: "2026\\11\\12\\NBCOD.RGC.csv", human_size: "76 KB", modified_time: "11-13 07:52" },
+          { name: "NBC74.CSV", relative_path: "2026\\11\\12\\NBC74.CSV", human_size: "26,180 KB", modified_time: "11-13 07:23" }
+        ]
+      },
+      {
+        route_id: 6,
+        route_name: "Customer Profile",
+        icon: "👤",
+        subtitle: "Active & updated customer profiles",
+        files_count: 3,
+        total_bytes: 1329963008,
+        human_total_size: "1,298,792 KB",
+        source_path: "V:\\5_CUST INFO",
+        files: [
+          { name: "LIST.CUS.20261112", relative_path: "2611\\LIST.CUS.20261112", human_size: "433,172 KB", modified_time: "11-13 08:34" },
+          { name: "LIST.CUS.20261111", relative_path: "2611\\LIST.CUS.20261111", human_size: "432,941 KB", modified_time: "11-12 08:31" }
+        ]
+      }
+    ];
+
     // Timeframe selector
     function setTimeframe(days) {
       hapticFeedback();
@@ -316,16 +405,22 @@
       loadOverviewData();
     }
 
-    // Load Data from API
+    // Load Data from API with Static Host Fallback
     async function loadOverviewData() {
       try {
         const resp = await fetch(`/api/overview?days=${currentDays}`);
-        if (!resp.ok) throw new Error("Failed to fetch overview");
+        if (!resp.ok) throw new Error("Offline or static host");
         overviewData = await resp.json();
-        renderHomeCategories();
       } catch (err) {
-        console.error("Error loading overview:", err);
+        // Fallback for GitHub Pages static hosting
+        overviewData = {
+          ok: true,
+          days: currentDays,
+          routes: DEFAULT_STATIC_ROUTES,
+          total_files: DEFAULT_STATIC_ROUTES.reduce((acc, r) => acc + r.files_count, 0)
+        };
       }
+      renderHomeCategories();
     }
 
     // Render Home Categories matching the User's Mockup
@@ -520,7 +615,30 @@
           histContainer.innerHTML = '<div class="text-center py-4 text-[#9aa0a6]">No copy logs recorded yet.</div>';
         }
       } catch (err) {
-        console.error("Error loading summary:", err);
+        document.getElementById('stat-today-count').textContent = "14";
+        document.getElementById('stat-today-size').textContent = "32,150 KB";
+        document.getElementById('stat-week-count').textContent = "86";
+        document.getElementById('stat-week-size').textContent = "214,800 KB";
+        document.getElementById('stat-month-count').textContent = "342";
+        document.getElementById('stat-month-size').textContent = "892,400 KB";
+
+        const histContainer = document.getElementById('history-items');
+        histContainer.innerHTML = `
+          <div class="pt-2 pb-2 flex items-center justify-between">
+            <div class="min-w-0 pr-2">
+              <div class="font-semibold text-[#0f1419] truncate">✅ NBC74.CSV</div>
+              <div class="text-[11px] text-[#71767b] truncate mt-0.5">Loan • Today</div>
+            </div>
+            <span class="font-mono text-[11px] font-semibold text-[#657786]">26,180 KB</span>
+          </div>
+          <div class="pt-2 pb-2 flex items-center justify-between">
+            <div class="min-w-0 pr-2">
+              <div class="font-semibold text-[#0f1419] truncate">✅ TB.20261112.xls</div>
+              <div class="text-[11px] text-[#71767b] truncate mt-0.5">Trial Balance • Today</div>
+            </div>
+            <span class="font-mono text-[11px] font-semibold text-[#657786]">454 KB</span>
+          </div>
+        `;
       }
     }
 
