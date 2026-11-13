@@ -1,43 +1,672 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Home</title><script src="https://telegram.org/js/telegram-web-app.js"></script><style>:root{--bg:#efeff1;--card:#fff;--ink:#16161a;--mute:#8c8c94;--accent:#d9545d;--seg:#e4e4e8;--line:#efeff1;--green:#2e9e63}
-*{box-sizing:border-box;margin:0}
-body{background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;padding:max(20px,env(safe-area-inset-top)) 16px 40px;max-width:520px;margin:auto}
-h1{font-size:30px;font-weight:700;letter-spacing:-.02em}
-.sub{color:var(--mute);font-size:15px;margin:2px 0 16px}
-.card{background:var(--card);border-radius:24px;padding:8px 20px;margin-bottom:14px}
-.card.pad{padding:16px 20px}
-.row{display:flex;align-items:center;gap:14px;padding:15px 0;border-bottom:1px solid var(--line)}
-.row:last-child{border:0}
-.txt{flex:1;min-width:0}.t{font-size:17px}.m{color:var(--mute);font-size:14px;margin-top:2px}
-.r{text-align:right;font-variant-numeric:tabular-nums}
-.up{color:var(--green)}.down{color:var(--accent)}
-.tot{font-weight:700}
-.seg{display:flex;background:var(--seg);border-radius:14px;padding:4px;margin-bottom:14px}
-.seg button{flex:1;border:0;background:none;padding:9px 0;font:inherit;font-size:15px;border-radius:11px;color:var(--ink)}
-.seg button[aria-pressed=true]{background:var(--card);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
-input{width:100%;font:inherit;font-size:20px;padding:11px 12px;border:1px solid #e0e0e4;border-radius:12px;background:#fafafb}
-.note{color:var(--mute);font-size:13px;text-align:center;margin-top:6px}
-.back{display:inline-block;color:var(--accent);font-size:15px;font-weight:600;text-decoration:none;margin-bottom:10px}
-.badge{font-size:13px;padding:3px 10px;border-radius:99px;background:#e6f5ec;color:var(--green)}
-.badge.warn{background:#fbe9ea;color:var(--accent)}
-.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.bar strong{font-size:17px}
-.bar button{border:0;background:none;color:var(--accent);font:inherit;font-size:15px;font-weight:600;padding:4px 0 4px 14px}
-.sel{cursor:pointer}.box{width:28px;height:28px;border-radius:50%;border:2px solid #d4d4d9;flex:none;display:grid;place-items:center}
-.sel.on .box{background:var(--accent);border-color:var(--accent)}.sel:not(.on) .box svg{display:none}
-.sel:not(.on) .t,.sel:not(.on) .r{color:var(--mute)}
-body{padding-bottom:110px}
-.dock{position:fixed;left:0;right:0;bottom:0;padding:12px 16px max(16px,env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%)}
-.dock button{display:block;width:100%;max-width:488px;margin:auto;border:0;border-radius:16px;background:var(--accent);color:#fff;font:inherit;font-size:17px;font-weight:600;padding:15px}
-.dock button:disabled{background:#cfcfd4}
-.n{width:74px;font-size:14px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.stat{background:var(--card);border-radius:20px;padding:14px 16px}.stat b{display:block;font-size:28px;letter-spacing:-.02em}.stat span{color:var(--mute);font-size:13px}
-.bars{display:flex;align-items:flex-end;gap:3px;height:96px}.bars i{flex:1;background:var(--accent);border-radius:4px 4px 0 0;min-height:2px}
-.bars i.z{background:#ecc9cc}.lab{display:flex;justify-content:space-between;color:var(--mute);font-size:12px;margin-top:6px}
-.vbar{height:8px;border-radius:99px;background:var(--seg);margin-top:6px;overflow:hidden}.vbar i{display:block;height:100%;background:var(--accent)}</style></head><body>
-<h1>Home</h1><p class="sub">Choose a view</p>
-<section class="card"><a class="row" href="files.html" style="text-decoration:none;color:inherit"><div class="txt"><div class="t">View all files</div><div class="m">Source files changed in the last N days</div></div><svg width="10" height="16" viewBox="0 0 10 16" fill="none" stroke="#b5b5bb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l6 6-6 6"/></svg></a><a class="row" href="rates.html" style="text-decoration:none;color:inherit"><div class="txt"><div class="t">View exchange rate</div><div class="m">Daily rates against USD</div></div><svg width="10" height="16" viewBox="0 0 10 16" fill="none" stroke="#b5b5bb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l6 6-6 6"/></svg></a><a class="row" href="trial-balance.html" style="text-decoration:none;color:inherit"><div class="txt"><div class="t">View trial balance</div><div class="m">Debits and credits by account</div></div><svg width="10" height="16" viewBox="0 0 10 16" fill="none" stroke="#b5b5bb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l6 6-6 6"/></svg></a><a class="row" href="deposits.html" style="text-decoration:none;color:inherit"><div class="txt"><div class="t">View deposit listing</div><div class="m">Active and maturing deposits</div></div><svg width="10" height="16" viewBox="0 0 10 16" fill="none" stroke="#b5b5bb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l6 6-6 6"/></svg></a><a class="row" href="report.html" style="text-decoration:none;color:inherit"><div class="txt"><div class="t">View summary report</div><div class="m">Copies completed: daily, weekly, monthly</div></div><svg width="10" height="16" viewBox="0 0 10 16" fill="none" stroke="#b5b5bb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l6 6-6 6"/></svg></a></section>
-<script>const tg=window.Telegram?.WebApp;tg?.ready();tg?.expand();tg?.BackButton?.hide();</script>
-</body></html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ETL Telegram Mini App</title>
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- Tailwind CSS -->
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --bg: #f2f4f8;
+      --card-bg: #ffffff;
+      --text: #0f1419;
+      --text-muted: #657786;
+      --border: #e6ecf0;
+      --primary: #0088cc;
+      --primary-hover: #0077b5;
+      --success: #10b981;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .card-row {
+      transition: background-color 0.15s ease;
+    }
+    .card-row:active {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+    /* iOS / Telegram style smooth toggle */
+    .toggle-checkbox:checked {
+      right: 0;
+      border-color: #10b981;
+    }
+    .toggle-checkbox:checked + .toggle-label {
+      background-color: #10b981;
+    }
+    /* Smooth view slide transitions */
+    .view-screen {
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-24">
+
+  <!-- Main Container -->
+  <div class="max-w-lg mx-auto px-4 pt-5">
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 1: HOME (Matching User Mockup)                                   -->
+    <!-- ===================================================================== -->
+    <div id="view-home" class="view-screen">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h1 class="text-3xl font-extrabold tracking-tight text-[#0f1419]">Home</h1>
+          <p class="text-sm font-medium text-[#71767b] mt-0.5">Choose a view</p>
+        </div>
+        <!-- Timeframe selector pills -->
+        <div class="flex items-center gap-1 bg-[#e8ebf0] p-1 rounded-2xl text-xs font-semibold">
+          <button onclick="setTimeframe(1)" id="btn-days-1" class="px-2.5 py-1 rounded-xl transition text-[#71767b]">1D</button>
+          <button onclick="setTimeframe(3)" id="btn-days-3" class="px-2.5 py-1 rounded-xl transition bg-white text-[#0f1419] shadow-sm">3D</button>
+          <button onclick="setTimeframe(7)" id="btn-days-7" class="px-2.5 py-1 rounded-xl transition text-[#71767b]">7D</button>
+        </div>
+      </div>
+
+      <!-- Main Navigation Card (White rounded card with chevrons) -->
+      <div class="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#e8ebef] overflow-hidden divide-y divide-[#f0f2f5]">
+
+        <!-- 1. View all files -->
+        <div class="card-row p-4 px-5 flex items-center justify-between cursor-pointer" onclick="openAllFilesView()">
+          <div class="pr-2">
+            <div class="flex items-center gap-2">
+              <span class="text-base font-semibold text-[#0f1419]">View all files</span>
+              <span id="badge-all-files" class="px-2 py-0.5 rounded-full text-xs font-bold bg-[#e8f5e9] text-[#2e7d32]">...</span>
+            </div>
+            <p class="text-xs text-[#71767b] mt-0.5">Source files changed in the last <span class="days-label">3</span> days</p>
+          </div>
+          <svg class="w-5 h-5 text-[#9aa0a6] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </div>
+
+        <!-- Dynamic Category Rows (Exchange rate, Trial balance, Deposit, Loan, Customer, etc.) -->
+        <div id="home-category-rows" class="divide-y divide-[#f0f2f5]">
+          <!-- Loaded dynamically via JS -->
+          <div class="p-6 text-center text-xs text-[#9aa0a6]">Loading source routes...</div>
+        </div>
+
+        <!-- 7. View summary report -->
+        <div class="card-row p-4 px-5 flex items-center justify-between cursor-pointer" onclick="openSummaryView()">
+          <div class="pr-2">
+            <div class="flex items-center gap-2">
+              <span class="text-base font-semibold text-[#0f1419]">View summary report</span>
+            </div>
+            <p class="text-xs text-[#71767b] mt-0.5">Copies completed: daily, weekly, monthly</p>
+          </div>
+          <svg class="w-5 h-5 text-[#9aa0a6] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </div>
+
+      </div>
+
+      <!-- Quick Action: One-Click Copy All Ticked Sources -->
+      <div class="mt-5">
+        <button id="btn-copy-all" onclick="executeCopyAll()" class="w-full py-3.5 px-4 bg-[#0088cc] hover:bg-[#0077b5] active:scale-[0.99] text-white font-bold rounded-2xl shadow-md transition flex items-center justify-center gap-2 text-sm">
+          <span>⚡ One-Click Copy All (<span id="copy-all-count">0</span> Files)</span>
+        </button>
+      </div>
+
+      <!-- Footer Info -->
+      <div class="mt-4 flex items-center justify-between text-xs text-[#9aa0a6] px-1">
+        <button onclick="openSettingsView()" class="hover:text-[#0088cc] transition flex items-center gap-1">
+          <span>⚙️ Manage Active Sources</span>
+        </button>
+        <button onclick="refreshData()" class="hover:text-[#0088cc] transition flex items-center gap-1">
+          <span>🔄 Refresh</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 2: CATEGORY / DRILL-DOWN FILE VIEW                               -->
+    <!-- ===================================================================== -->
+    <div id="view-category" class="view-screen hidden">
+      <!-- Navigation Back Button -->
+      <div class="flex items-center justify-between mb-4">
+        <button onclick="showHomeView()" class="inline-flex items-center gap-1 text-sm font-semibold text-[#0088cc] py-1 px-2 -ml-2 rounded-xl hover:bg-white transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          <span>Home</span>
+        </button>
+        <span id="cat-badge-total" class="text-xs font-semibold text-[#71767b]"></span>
+      </div>
+
+      <!-- Category Title Card -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-[#e8ebef] mb-3">
+        <div class="flex items-center gap-2.5">
+          <span id="cat-icon" class="text-2xl">📁</span>
+          <div>
+            <h2 id="cat-title" class="text-lg font-bold text-[#0f1419]">Category</h2>
+            <p id="cat-subtitle" class="text-xs text-[#71767b] mt-0.5">Subtitle</p>
+          </div>
+        </div>
+        <div id="cat-path-box" class="mt-2.5 pt-2.5 border-t border-[#f0f2f5] text-[11px] font-mono text-[#657786] break-all">
+          📥 <span id="cat-path"></span>
+        </div>
+      </div>
+
+      <!-- File List -->
+      <div id="cat-files-container" class="space-y-2 mb-4">
+        <!-- Files populated dynamically -->
+      </div>
+
+      <!-- Bottom Action -->
+      <div id="cat-copy-action-box" class="sticky bottom-4">
+        <button id="btn-copy-cat" onclick="executeCopyCurrentCategory()" class="w-full py-3 px-4 bg-[#0088cc] text-white font-bold rounded-2xl shadow-lg transition flex items-center justify-center gap-2 text-sm">
+          <span>⚡ Copy Selected Files</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 3: SUMMARY REPORT                                                -->
+    <!-- ===================================================================== -->
+    <div id="view-summary" class="view-screen hidden">
+      <div class="flex items-center justify-between mb-4">
+        <button onclick="showHomeView()" class="inline-flex items-center gap-1 text-sm font-semibold text-[#0088cc] py-1 px-2 -ml-2 rounded-xl hover:bg-white transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          <span>Home</span>
+        </button>
+        <span class="text-xs font-semibold text-[#71767b]">Copy History</span>
+      </div>
+
+      <div class="mb-4">
+        <h2 class="text-2xl font-bold text-[#0f1419]">Summary Report</h2>
+        <p class="text-xs text-[#71767b] mt-0.5">Copies completed: daily, weekly, monthly</p>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="grid grid-cols-3 gap-2.5 mb-4">
+        <div class="bg-white p-3.5 rounded-2xl border border-[#e8ebef] shadow-sm text-center">
+          <div class="text-[11px] font-semibold text-[#71767b] uppercase tracking-wider">Today</div>
+          <div id="stat-today-count" class="text-xl font-extrabold text-[#0f1419] mt-1">0</div>
+          <div id="stat-today-size" class="text-[10px] text-[#9aa0a6] mt-0.5">0 KB</div>
+        </div>
+        <div class="bg-white p-3.5 rounded-2xl border border-[#e8ebef] shadow-sm text-center">
+          <div class="text-[11px] font-semibold text-[#71767b] uppercase tracking-wider">7 Days</div>
+          <div id="stat-week-count" class="text-xl font-extrabold text-[#0f1419] mt-1">0</div>
+          <div id="stat-week-size" class="text-[10px] text-[#9aa0a6] mt-0.5">0 KB</div>
+        </div>
+        <div class="bg-white p-3.5 rounded-2xl border border-[#e8ebef] shadow-sm text-center">
+          <div class="text-[11px] font-semibold text-[#71767b] uppercase tracking-wider">30 Days</div>
+          <div id="stat-month-count" class="text-xl font-extrabold text-[#0f1419] mt-1">0</div>
+          <div id="stat-month-size" class="text-[10px] text-[#9aa0a6] mt-0.5">0 KB</div>
+        </div>
+      </div>
+
+      <!-- Recent History List -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-[#e8ebef] mb-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold text-[#0f1419]">Recent Copy Log</h3>
+          <span class="text-xs text-[#9aa0a6]">PostgreSQL Log</span>
+        </div>
+        <div id="history-items" class="space-y-2 text-xs divide-y divide-[#f0f2f5]">
+          <div class="text-center py-4 text-[#9aa0a6]">Loading history...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 4: SOURCE CHECKLIST SETTINGS                                     -->
+    <!-- ===================================================================== -->
+    <div id="view-settings" class="view-screen hidden">
+      <div class="flex items-center justify-between mb-4">
+        <button onclick="showHomeView()" class="inline-flex items-center gap-1 text-sm font-semibold text-[#0088cc] py-1 px-2 -ml-2 rounded-xl hover:bg-white transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          <span>Home</span>
+        </button>
+        <span class="text-xs font-semibold text-[#71767b]">Settings</span>
+      </div>
+
+      <div class="mb-4">
+        <h2 class="text-2xl font-bold text-[#0f1419]">Manage Sources</h2>
+        <p class="text-xs text-[#71767b] mt-0.5">Toggle sources to include or exclude from bulk copying</p>
+      </div>
+
+      <!-- Toggle actions -->
+      <div class="flex items-center justify-between mb-3 px-1 text-xs font-semibold">
+        <button onclick="selectAllSources(true)" class="text-[#0088cc] hover:underline">Select All</button>
+        <button onclick="selectAllSources(false)" class="text-[#71767b] hover:underline">Untick All</button>
+      </div>
+
+      <div id="settings-source-list" class="bg-white rounded-2xl shadow-sm border border-[#e8ebef] divide-y divide-[#f0f2f5] overflow-hidden">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: COPY PROGRESS / RESULT OVERLAY                                 -->
+  <!-- ===================================================================== -->
+  <div id="modal-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl text-center">
+      <div id="modal-icon" class="w-12 h-12 mx-auto rounded-full bg-[#e8f5e9] flex items-center justify-center text-2xl mb-3">
+        ⚡
+      </div>
+      <h3 id="modal-title" class="text-lg font-bold text-[#0f1419]">Copying Files...</h3>
+      <p id="modal-desc" class="text-xs text-[#71767b] mt-1 mb-4">Please wait while files are transferring</p>
+
+      <!-- Progress bar -->
+      <div id="modal-progress-bar" class="w-full bg-[#f0f2f5] rounded-full h-2.5 overflow-hidden mb-4">
+        <div id="modal-progress-fill" class="bg-[#0088cc] h-full rounded-full transition-all duration-300" style="width: 100%"></div>
+      </div>
+
+      <div id="modal-details" class="text-xs text-left bg-[#f8fafc] p-3 rounded-xl mb-4 max-h-40 overflow-y-auto space-y-1 font-mono text-[#4a5568] hidden">
+      </div>
+
+      <button id="modal-close-btn" onclick="closeModal()" class="w-full py-2.5 bg-[#0088cc] text-white font-bold rounded-xl text-xs shadow-md hidden">
+        Done
+      </button>
+    </div>
+  </div>
+
+  <!-- Mini App Logic -->
+  <script>
+    // Initialize Telegram WebApp SDK
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      tg.BackButton.onClick(() => {
+        showHomeView();
+      });
+    }
+
+    function hapticFeedback(type = 'light') {
+      if (tg?.HapticFeedback) {
+        if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
+        else if (type === 'impact') tg.HapticFeedback.impactOccurred('medium');
+        else tg.HapticFeedback.impactOccurred('light');
+      }
+    }
+
+    // State
+    let currentDays = 3;
+    let overviewData = null;
+    let excludedRouteIds = new Set();
+    let currentCategoryRoute = null;
+
+    // Timeframe selector
+    function setTimeframe(days) {
+      hapticFeedback();
+      currentDays = days;
+      [1, 3, 7].forEach(d => {
+        const btn = document.getElementById(`btn-days-${d}`);
+        if (d === days) {
+          btn.className = "px-2.5 py-1 rounded-xl transition bg-white text-[#0f1419] shadow-sm";
+        } else {
+          btn.className = "px-2.5 py-1 rounded-xl transition text-[#71767b]";
+        }
+      });
+      document.querySelectorAll('.days-label').forEach(el => el.textContent = days);
+      loadOverviewData();
+    }
+
+    // Load Data from API
+    async function loadOverviewData() {
+      try {
+        const resp = await fetch(`/api/overview?days=${currentDays}`);
+        if (!resp.ok) throw new Error("Failed to fetch overview");
+        overviewData = await resp.json();
+        renderHomeCategories();
+      } catch (err) {
+        console.error("Error loading overview:", err);
+      }
+    }
+
+    // Render Home Categories matching the User's Mockup
+    function renderHomeCategories() {
+      if (!overviewData || !overviewData.routes) return;
+
+      const container = document.getElementById('home-category-rows');
+      container.innerHTML = '';
+
+      let totalTickedFiles = 0;
+
+      overviewData.routes.forEach(r => {
+        const isExcluded = excludedRouteIds.has(r.route_id);
+        if (!isExcluded) {
+          totalTickedFiles += r.files_count;
+        }
+
+        const countBadge = r.files_count > 0 
+          ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold ${isExcluded ? 'bg-gray-100 text-gray-500' : 'bg-[#e8f5e9] text-[#2e7d32]'}">${r.files_count}</span>`
+          : `<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-[#f0f2f5] text-[#9aa0a6]">0</span>`;
+
+        const row = document.createElement('div');
+        row.className = `card-row p-4 px-5 flex items-center justify-between cursor-pointer ${isExcluded ? 'opacity-50' : ''}`;
+        row.onclick = () => openCategoryView(r);
+
+        row.innerHTML = `
+          <div class="pr-2">
+            <div class="flex items-center gap-2">
+              <span class="text-base font-semibold text-[#0f1419]">View ${r.route_name.toLowerCase()}</span>
+              ${countBadge}
+            </div>
+            <p class="text-xs text-[#71767b] mt-0.5">${r.subtitle}</p>
+          </div>
+          <svg class="w-5 h-5 text-[#9aa0a6] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+          </svg>
+        `;
+        container.appendChild(row);
+      });
+
+      // Update badge on 'View all files'
+      document.getElementById('badge-all-files').textContent = `${totalTickedFiles} files`;
+      document.getElementById('copy-all-count').textContent = totalTickedFiles;
+    }
+
+    // View Switching
+    function hideAllViews() {
+      ['view-home', 'view-category', 'view-summary', 'view-settings'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+    }
+
+    function showHomeView() {
+      hapticFeedback();
+      hideAllViews();
+      document.getElementById('view-home').classList.remove('hidden');
+      if (tg?.BackButton) tg.BackButton.hide();
+    }
+
+    function openAllFilesView() {
+      hapticFeedback();
+      currentCategoryRoute = null; // null means all
+      hideAllViews();
+      document.getElementById('view-category').classList.remove('hidden');
+      if (tg?.BackButton) tg.BackButton.show();
+
+      document.getElementById('cat-icon').textContent = '📂';
+      document.getElementById('cat-title').textContent = 'All Files';
+      document.getElementById('cat-subtitle').textContent = `Files across all sources in the last ${currentDays} days`;
+      document.getElementById('cat-path-box').classList.add('hidden');
+
+      const container = document.getElementById('cat-files-container');
+      container.innerHTML = '';
+
+      let allFiles = [];
+      overviewData?.routes.forEach(r => {
+        if (!excludedRouteIds.has(r.route_id)) {
+          r.files.forEach(f => {
+            allFiles.push({ ...f, route_name: r.route_name, route_id: r.route_id, icon: r.icon });
+          });
+        }
+      });
+
+      document.getElementById('cat-badge-total').textContent = `${allFiles.length} files`;
+
+      if (allFiles.length === 0) {
+        container.innerHTML = '<div class="p-8 text-center text-sm text-[#71767b]">No files found for this timeframe.</div>';
+        return;
+      }
+
+      allFiles.forEach(f => {
+        const item = document.createElement('div');
+        item.className = 'bg-white rounded-2xl p-3.5 border border-[#e8ebef] shadow-sm flex items-center justify-between';
+        item.innerHTML = `
+          <div class="pr-2 min-w-0">
+            <div class="flex items-center gap-1.5 text-xs text-[#0088cc] font-semibold mb-0.5">
+              <span>${f.icon || '📁'}</span>
+              <span>${f.route_name}</span>
+            </div>
+            <div class="font-mono text-xs font-semibold text-[#0f1419] truncate">${f.relative_path || f.name}</div>
+            <div class="text-[11px] text-[#71767b] mt-0.5">${f.human_size} • ${f.modified_time}</div>
+          </div>
+          <span class="px-2 py-1 bg-[#f0f2f5] text-[#0f1419] font-mono text-[11px] font-bold rounded-lg flex-shrink-0">
+            ${f.human_size}
+          </span>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function openCategoryView(route) {
+      hapticFeedback();
+      currentCategoryRoute = route;
+      hideAllViews();
+      document.getElementById('view-category').classList.remove('hidden');
+      if (tg?.BackButton) tg.BackButton.show();
+
+      document.getElementById('cat-icon').textContent = route.icon;
+      document.getElementById('cat-title').textContent = route.route_name;
+      document.getElementById('cat-subtitle').textContent = route.subtitle;
+      document.getElementById('cat-path-box').classList.remove('hidden');
+      document.getElementById('cat-path').textContent = route.source_path;
+
+      document.getElementById('cat-badge-total').textContent = `${route.files.length} files (${route.human_total_size})`;
+
+      const container = document.getElementById('cat-files-container');
+      container.innerHTML = '';
+
+      if (route.files.length === 0) {
+        container.innerHTML = '<div class="p-8 text-center text-sm text-[#71767b]">No recent files found in this folder.</div>';
+        return;
+      }
+
+      route.files.forEach(f => {
+        const item = document.createElement('div');
+        item.className = 'bg-white rounded-2xl p-3.5 border border-[#e8ebef] shadow-sm flex items-center justify-between';
+        item.innerHTML = `
+          <div class="pr-2 min-w-0">
+            <div class="font-mono text-xs font-semibold text-[#0f1419] truncate">${f.relative_path || f.name}</div>
+            <div class="text-[11px] text-[#71767b] mt-0.5">Modified: ${f.modified_time}</div>
+          </div>
+          <span class="px-2 py-1 bg-[#f0f2f5] text-[#0f1419] font-mono text-[11px] font-bold rounded-lg flex-shrink-0">
+            ${f.human_size}
+          </span>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // Open Summary View
+    async function openSummaryView() {
+      hapticFeedback();
+      hideAllViews();
+      document.getElementById('view-summary').classList.remove('hidden');
+      if (tg?.BackButton) tg.BackButton.show();
+
+      try {
+        const [sumResp, histResp] = await Promise.all([
+          fetch('/api/summary'),
+          fetch('/api/history?limit=15')
+        ]);
+        const sumData = await sumResp.json();
+        const histData = await histResp.json();
+
+        if (sumData.ok && sumData.summary) {
+          const s = sumData.summary;
+          document.getElementById('stat-today-count').textContent = s.today_count;
+          document.getElementById('stat-today-size').textContent = s.human_today_bytes;
+          document.getElementById('stat-week-count').textContent = s.weekly_count;
+          document.getElementById('stat-week-size').textContent = s.human_weekly_bytes;
+          document.getElementById('stat-month-count').textContent = s.monthly_count;
+          document.getElementById('stat-month-size').textContent = s.human_monthly_bytes;
+        }
+
+        const histContainer = document.getElementById('history-items');
+        histContainer.innerHTML = '';
+        if (histData.ok && histData.history && histData.history.length > 0) {
+          histData.history.forEach(h => {
+            const statusIcon = h.status === 'COMPLETED' ? '✅' : (h.status === 'SKIPPED' ? '⏭️' : '❌');
+            const item = document.createElement('div');
+            item.className = 'pt-2 pb-2 flex items-center justify-between';
+            item.innerHTML = `
+              <div class="min-w-0 pr-2">
+                <div class="font-semibold text-[#0f1419] truncate">${statusIcon} ${h.file_name}</div>
+                <div class="text-[11px] text-[#71767b] truncate mt-0.5">${h.route_name} • ${h.copied_at?.substring(0, 16)}</div>
+              </div>
+              <span class="font-mono text-[11px] font-semibold text-[#657786] flex-shrink-0">${h.human_size}</span>
+            `;
+            histContainer.appendChild(item);
+          });
+        } else {
+          histContainer.innerHTML = '<div class="text-center py-4 text-[#9aa0a6]">No copy logs recorded yet.</div>';
+        }
+      } catch (err) {
+        console.error("Error loading summary:", err);
+      }
+    }
+
+    // Open Settings View
+    function openSettingsView() {
+      hapticFeedback();
+      hideAllViews();
+      document.getElementById('view-settings').classList.remove('hidden');
+      if (tg?.BackButton) tg.BackButton.show();
+
+      const container = document.getElementById('settings-source-list');
+      container.innerHTML = '';
+
+      overviewData?.routes.forEach(r => {
+        const isChecked = !excludedRouteIds.has(r.route_id);
+        const row = document.createElement('div');
+        row.className = 'p-3.5 px-4 flex items-center justify-between';
+        row.innerHTML = `
+          <div class="flex items-center gap-2.5">
+            <span class="text-xl">${r.icon}</span>
+            <div>
+              <div class="text-sm font-semibold text-[#0f1419]">${r.route_name}</div>
+              <div class="text-xs text-[#71767b]">${r.subtitle}</div>
+            </div>
+          </div>
+          <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleRoute(${r.route_id}, this.checked)" class="w-5 h-5 text-[#10b981] rounded-lg border-gray-300 focus:ring-[#10b981] cursor-pointer">
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function toggleRoute(routeId, isChecked) {
+      hapticFeedback();
+      if (isChecked) {
+        excludedRouteIds.delete(routeId);
+      } else {
+        excludedRouteIds.add(routeId);
+      }
+      renderHomeCategories();
+    }
+
+    function selectAllSources(checkAll) {
+      hapticFeedback();
+      if (checkAll) {
+        excludedRouteIds.clear();
+      } else {
+        overviewData?.routes.forEach(r => excludedRouteIds.add(r.route_id));
+      }
+      openSettingsView();
+      renderHomeCategories();
+    }
+
+    // Copy Execution via API
+    async function executeCopyAll() {
+      hapticFeedback('impact');
+
+      // If running inside Telegram Mini App, send command directly to office PC bot via Telegram Cloud Bridge!
+      if (tg?.sendData) {
+        tg.sendData(JSON.stringify({
+          action: "copy_all",
+          days: currentDays,
+          excluded_route_ids: Array.from(excludedRouteIds)
+        }));
+        tg.close();
+        return;
+      }
+
+      showModal("Transferring Files...", "Processing one-click copy across all ticked sources...");
+
+      try {
+        const resp = await fetch('/api/copy_all', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            days: currentDays,
+            excluded_route_ids: Array.from(excludedRouteIds),
+            user_label: "Telegram Mini App",
+          })
+        });
+        const res = await resp.json();
+
+        if (res.ok) {
+          hapticFeedback('success');
+          document.getElementById('modal-icon').textContent = '✅';
+          document.getElementById('modal-title').textContent = "Copy Completed!";
+          document.getElementById('modal-desc').textContent = `${res.copied_count} files copied, ${res.skipped_count} skipped (identical size).`;
+          
+          const detailsBox = document.getElementById('modal-details');
+          detailsBox.innerHTML = '';
+          detailsBox.classList.remove('hidden');
+
+          res.copied?.forEach(c => {
+            const row = document.createElement('div');
+            row.className = 'text-[#10b981] truncate';
+            row.textContent = `✅ [${c.route_name}] ${c.file_name}`;
+            detailsBox.appendChild(row);
+          });
+          res.skipped?.forEach(s => {
+            const row = document.createElement('div');
+            row.className = 'text-[#71767b] truncate';
+            row.textContent = `⏭️ [${s.route_name}] ${s.file_name} (${s.reason})`;
+            detailsBox.appendChild(row);
+          });
+        } else {
+          document.getElementById('modal-icon').textContent = '❌';
+          document.getElementById('modal-title').textContent = "Copy Failed";
+          document.getElementById('modal-desc').textContent = res.error || "Unknown error occurred";
+        }
+      } catch (err) {
+        document.getElementById('modal-icon').textContent = '❌';
+        document.getElementById('modal-title').textContent = "Network Error";
+        document.getElementById('modal-desc').textContent = err.message;
+      } finally {
+        document.getElementById('modal-progress-bar').classList.add('hidden');
+        document.getElementById('modal-close-btn').classList.remove('hidden');
+      }
+    }
+
+    function executeCopyCurrentCategory() {
+      executeCopyAll();
+    }
+
+    // Modal Helpers
+    function showModal(title, desc) {
+      document.getElementById('modal-icon').textContent = '⚡';
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-desc').textContent = desc;
+      document.getElementById('modal-progress-bar').classList.remove('hidden');
+      document.getElementById('modal-details').classList.add('hidden');
+      document.getElementById('modal-close-btn').classList.add('hidden');
+      document.getElementById('modal-overlay').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      hapticFeedback();
+      document.getElementById('modal-overlay').classList.add('hidden');
+      loadOverviewData();
+    }
+
+    function refreshData() {
+      hapticFeedback();
+      loadOverviewData();
+    }
+
+    // Initial Load
+    loadOverviewData();
+  </script>
+</body>
+</html>
