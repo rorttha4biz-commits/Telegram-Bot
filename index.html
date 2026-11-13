@@ -86,10 +86,79 @@
           </svg>
         </div>
 
-        <!-- Dynamic Category Rows (Exchange rate, Trial balance, Deposit, Loan, Customer, etc.) -->
+        <!-- Category Rows Pre-rendered (Instant Display on GitHub Pages) -->
         <div id="home-category-rows" class="divide-y divide-[#f0f2f5]">
-          <!-- Loaded dynamically via JS -->
-          <div class="p-6 text-center text-xs text-[#9aa0a6]">Loading source routes...</div>
+          <!-- Exchange Rate -->
+          <div class="card-row p-4 px-5 flex items-center justify-between cursor-pointer" onclick="openCategoryView(overviewData.routes[0])">
+            <div class="pr-2">
+              <div class="flex items-center gap-2">
+                <span class="text-base font-semibold text-[#0f1419]">View exchange rate</span>
+                <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#e8f5e9] text-[#2e7d32]">3</span>
+              </div>
+              <p class="text-xs text-[#71767b] mt-0.5">Daily rates against USD</p>
+            </div>
+            <svg class="w-5 h-5 text-[#9aa0a6] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+          </div>
+
+          <!-- Trial Balance -->
+          <div class="card-row p-4 px-5 flex items-center justify-between cursor-pointer" onclick="openCategoryView(overviewData.routes[1])">
+            <div class="pr-2">
+              <div class="flex items-center gap-2">
+                <span class="text-base font-semibold text-[#0f1419]">View trial balance</span>
+                <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#e8f5e9] text-[#2e7d32]">3</span>
+              </div>
+              <p class="text-xs text-[#71767b] mt-0.5">Debits and credits by account</p>
+            </div>
+            <svg class="w-5 h-5 text-[#9aa0a6] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+          </div>
+
+          <!-- Deposit Listing -->
+          <div class="card-row p-4 px-5 flex items-center justify-between cursor-pointer" onclick="openCategoryView(overviewData.routes[2])">
+            <div class="pr-2">
+              <div class="flex items-center gap-2">
+                <span class="text-base font-semibold text-[#0f1419]">View deposit listing</span>
+                <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#e8f5e9] text-[#2e7d32]">6</span>
+              </div>
+              <p class="text-xs text-[#71767b] mt-0.5">Active and maturing deposits</p>
+            </div>
+            <svg class="w-5 h-5 text-[#9aa0a6] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+          </div>
+
+          <!-- Saroeurn -->
+          <div class="card-row p-4 px-5 flex items-center justify-between cursor-pointer" onclick="openCategoryView(overviewData.routes[3])">
+            <div class="pr-2">
+              <div class="flex items-center gap-2">
+                <span class="text-base font-semibold text-[#0f1419]">View saroeurn</span>
+                <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-[#f0f2f5] text-[#9aa0a6]">0</span>
+              </div>
+              <p class="text-xs text-[#71767b] mt-0.5">Tax & monthly general reports</p>
+            </div>
+            <svg class="w-5 h-5 text-[#9aa0a6] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+          </div>
+
+          <!-- Loan -->
+          <div class="card-row p-4 px-5 flex items-center justify-between cursor-pointer" onclick="openCategoryView(overviewData.routes[4])">
+            <div class="pr-2">
+              <div class="flex items-center gap-2">
+                <span class="text-base font-semibold text-[#0f1419]">View loan</span>
+                <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#e8f5e9] text-[#2e7d32]">9</span>
+              </div>
+              <p class="text-xs text-[#71767b] mt-0.5">NBCOD and NBC74 loan reports [YYYY\MM\DD]</p>
+            </div>
+            <svg class="w-5 h-5 text-[#9aa0a6] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+          </div>
+
+          <!-- Customer Profile -->
+          <div class="card-row p-4 px-5 flex items-center justify-between cursor-pointer" onclick="openCategoryView(overviewData.routes[5])">
+            <div class="pr-2">
+              <div class="flex items-center gap-2">
+                <span class="text-base font-semibold text-[#0f1419]">View customer profile</span>
+                <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#e8f5e9] text-[#2e7d32]">3</span>
+              </div>
+              <p class="text-xs text-[#71767b] mt-0.5">Active & updated customer profiles</p>
+            </div>
+            <svg class="w-5 h-5 text-[#9aa0a6] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+          </div>
         </div>
 
         <!-- 7. View summary report -->
@@ -294,13 +363,7 @@
       }
     }
 
-    // State
-    let currentDays = 3;
-    let overviewData = null;
-    let excludedRouteIds = new Set();
-    let currentCategoryRoute = null;
-
-    // Default routes for static hosting (GitHub Pages)
+    // Default routes for instant static display (GitHub Pages & Offline)
     const DEFAULT_STATIC_ROUTES = [
       {
         route_id: 1,
@@ -388,6 +451,17 @@
         ]
       }
     ];
+
+    // State - Initialized immediately with default routes
+    let currentDays = 3;
+    let overviewData = {
+      ok: true,
+      days: 3,
+      routes: DEFAULT_STATIC_ROUTES,
+      total_files: DEFAULT_STATIC_ROUTES.reduce((acc, r) => acc + r.files_count, 0)
+    };
+    let excludedRouteIds = new Set();
+    let currentCategoryRoute = null;
 
     // Timeframe selector
     function setTimeframe(days) {
